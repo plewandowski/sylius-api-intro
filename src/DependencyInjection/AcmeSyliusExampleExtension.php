@@ -37,7 +37,6 @@ final class AcmeSyliusExampleExtension extends AbstractResourceExtension impleme
     public function prepend(ContainerBuilder $container): void
     {
         $this->prependDoctrineMigrations($container);
-        $this->prependApiPlatformMapping($container);
     }
 
     protected function getMigrationsNamespace(): string
@@ -53,15 +52,5 @@ final class AcmeSyliusExampleExtension extends AbstractResourceExtension impleme
     protected function getNamespacesOfMigrationsExecutedBefore(): array
     {
         return ['Sylius\Bundle\CoreBundle\Migrations'];
-    }
-
-    private function prependApiPlatformMapping(ContainerBuilder $container): void
-    {
-        /** @var array<string, array<string, string>> $metadata */
-        $metadata = $container->getParameter('kernel.bundles_metadata');
-
-        $path = $metadata['AcmeSyliusExamplePlugin']['path'] . '/Resources/config/api_resources/';
-
-        $container->prependExtensionConfig('api_platform', ['mapping' => ['paths' => [$path]]]);
     }
 }
