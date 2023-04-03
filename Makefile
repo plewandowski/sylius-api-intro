@@ -24,10 +24,18 @@ frontend:
 	(cd tests/Application && yarn install --pure-lockfile)
 	(cd tests/Application && GULP_ENV=prod yarn build)
 
+dropdb:
+	tests/Application/bin/console doctrine:database:drop --if-exists --force
+
+createdb:
+	tests/Application/bin/console doctrine:database:create --if-not-exists
+
 behat:
 	APP_ENV=test vendor/bin/behat --colors --strict --no-interaction -vvv -f progress
 
-init: install backend frontend
+init: createdb install backend frontend
+
+reinit: dropdb init
 
 ci: init phpstan psalm phpunit phpspec behat
 
